@@ -1,0 +1,94 @@
+package com.nelson.book_inventory_thymeleaf.models;
+
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "book")
+public class Book {
+
+	@Id
+	private Integer bookISBN;
+	
+	private Integer authorId;
+	@ManyToOne
+	@JoinColumn(name="genre_id")
+	private Genre genreId;
+	
+	private String title;
+	private Integer stock;
+	private Double price;
+	private Integer pages;
+	private Date publicationDate;
+
+
+	public Integer getBookISBN() {
+		return bookISBN;
+	}
+
+	public void setBookISBN(Integer bookISBN) {
+		this.bookISBN = bookISBN;
+	}
+
+	public Integer getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(Integer authorId) {
+		this.authorId = authorId;
+	}
+
+//	public Integer getGenre() {
+//		return genreId;
+//	}
+//
+//	public void setGenre(Integer genreId) {
+//		this.genreId = genreId;
+//	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Integer getPages() {
+		return pages;
+	}
+
+	public void setPages(Integer pages) {
+		this.pages = pages;
+	}
+
+	public Date getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(Date publicationDate) {
+		this.publicationDate = publicationDate;
+	}
+
+}
