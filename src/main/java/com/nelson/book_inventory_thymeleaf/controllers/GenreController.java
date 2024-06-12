@@ -1,9 +1,9 @@
 package com.nelson.book_inventory_thymeleaf.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,13 +31,13 @@ public class GenreController {
 	
 	//select by id
 	@GetMapping(path="/{id}")
-	public Optional<Genre> getGenreById(@PathVariable("id") Integer id){
+	public Genre getGenreById(@PathVariable("id") Integer id){
 		return this.genreServ.getGenreById(id);
 	}
 	
 	//insert
 	@PostMapping
-	public Genre insertGenre(@RequestBody Genre genre) {
+	public ResponseEntity<Genre> insertGenre(@RequestBody Genre genre) {
 		return genreServ.insertGenre(genre);
 	}
 	

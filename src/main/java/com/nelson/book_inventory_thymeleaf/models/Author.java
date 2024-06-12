@@ -1,11 +1,19 @@
 package com.nelson.book_inventory_thymeleaf.models;
 
 import java.util.Date;
+import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="author")
+@Table(name = "author")
 public class Author {
 
 	@Id
@@ -21,6 +29,11 @@ public class Author {
 	private Gender gender;
 	@Column
 	private Date DOB;
+	@OneToMany(mappedBy = "authorId", fetch = FetchType.LAZY)
+	List<Book> books;
+
+	public Author() {
+	}
 
 	public Author(Integer authorId, String name, String lastName, String country, Gender gender, Date dOB) {
 		this.authorId = authorId;
@@ -29,6 +42,14 @@ public class Author {
 		this.country = country;
 		this.gender = gender;
 		DOB = dOB;
+	}
+
+	public List<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(List<Book> books) {
+		this.books = books;
 	}
 
 	public Integer getAuthorId() {

@@ -41,13 +41,12 @@ public class Genre {
 		this.genreId = genreId;
 	}
 
-
 	public String getGenre() {
 		return genre;
 	}
 
 	public void setGenre(String genre) {
-		this.genre = genre;
+		this.genre = genre.toUpperCase();
 	}
 
 	public String getDescription() {

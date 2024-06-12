@@ -14,8 +14,9 @@ public class Book {
 
 	@Id
 	private Integer bookISBN;
-	
-	private Integer authorId;
+	@ManyToOne
+	@JoinColumn(name="author_id")
+	private Author authorId;
 	@ManyToOne
 	@JoinColumn(name="genre_id")
 	private Genre genreId;
@@ -35,11 +36,11 @@ public class Book {
 		this.bookISBN = bookISBN;
 	}
 
-	public Integer getAuthorId() {
+	public Author getAuthorId() {
 		return authorId;
 	}
 
-	public void setAuthorId(Integer authorId) {
+	public void setAuthorId(Author authorId) {
 		this.authorId = authorId;
 	}
 

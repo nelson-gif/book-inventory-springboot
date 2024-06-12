@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.nelson.book_inventory_thymeleaf.models.Genre;
 import com.nelson.book_inventory_thymeleaf.repositories.IGenreRepository;
@@ -31,13 +34,28 @@ public class GenreService {
 //	}
 	
 	//selectById
-	public Optional<Genre> getGenreById(Integer id){
-		return genreRepo.findById(id);
+	public Genre getGenreById(Integer id){
+		Genre genre = genreRepo.findById(id).orElse(null);
+		
+		if(genre == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unable to save the genre");
+		}
+		
+		return genre;
 	}
 	
 	//insert
-	public Genre insertGenre(Genre genre) {
-		return genreRepo.save(genre);
+	public ResponseEntity<Genre> insertGenre(Genre genre) {
+		Optional<Genre> genreOptional = selectGenre()
+				.stream()
+				.filter(element -> element.getGenre().toLowerCase().equals(genre.getGenre().toLowerCase()))
+				.findFirst();
+		
+		if(genreOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Genre already exists");
+		}
+		
+		return new ResponseEntity<Genre>(genreRepo.save(genre), HttpStatus.CREATED);
 	}
 	
 	//delete
@@ -52,6 +70,16 @@ public class GenreService {
 	
 	//update
 	public Genre updateGenreById(Genre newGenre, Integer id) {
+		
+		Optional<Genre> genreOptional = selectGenre()
+				.stream()
+				.filter(element -> element.getIdGenre() == id)
+				.findFirst();
+		
+		if(!genreOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre doens't exists");
+		}
+		
 		Genre genre = genreRepo.findById(id).get();
 		
 		genre.setGenre(newGenre.getGenre());
