@@ -13,7 +13,7 @@ import com.nelson.book_inventory_thymeleaf.models.Genre;
 import com.nelson.book_inventory_thymeleaf.repositories.IGenreRepository;
 
 @Service
-public class GenreService {
+public class GenreService{
 	
 	@Autowired
 	IGenreRepository genreRepo;
@@ -23,22 +23,12 @@ public class GenreService {
 		return (ArrayList<Genre>)genreRepo.findAll();
 	}
 	
-//	public Integer returnId(String genre) {
-//		Integer id= 0;
-//		for(Genre element: selectGenre()) {
-//			if(element.getGenre().equalsIgnoreCase(genre)) {
-//				id = element.getIdGenre();
-//			}
-//		}
-//		return id;
-//	}
-	
 	//selectById
 	public Genre getGenreById(Integer id){
 		Genre genre = genreRepo.findById(id).orElse(null);
 		
 		if(genre == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unable to save the genre");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id provided doesn't exist in the database");
 		}
 		
 		return genre;
@@ -46,9 +36,12 @@ public class GenreService {
 	
 	//insert
 	public ResponseEntity<Genre> insertGenre(Genre genre) {
+		if(genre.getGenre() == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "genre value cannot be null");
+		}
 		Optional<Genre> genreOptional = selectGenre()
 				.stream()
-				.filter(element -> element.getGenre().toLowerCase().equals(genre.getGenre().toLowerCase()))
+				.filter(element -> element.equals(genre))
 				.findFirst();
 		
 		if(genreOptional.isPresent()) {

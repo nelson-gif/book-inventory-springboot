@@ -2,6 +2,7 @@ package com.nelson.book_inventory_thymeleaf.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -99,5 +100,25 @@ public class Author {
 	public void setDOB(Date dOB) {
 		DOB = dOB;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(DOB, country, gender, lastName, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Author other = (Author) obj;
+		return Objects.equals(DOB, other.DOB) && Objects.equals(country, other.country) && gender == other.gender
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(name, other.name);
+	}
+	
+	
 
 }

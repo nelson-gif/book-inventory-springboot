@@ -2,6 +2,7 @@ package com.nelson.book_inventory_thymeleaf.models;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -20,11 +21,15 @@ public class Book {
 	@ManyToOne
 	@JoinColumn(name="genre_id")
 	private Genre genreId;
-	
+	@Column
 	private String title;
+	@Column
 	private Integer stock;
+	@Column
 	private Double price;
+	@Column
 	private Integer pages;
+	@Column
 	private Date publicationDate;
 
 

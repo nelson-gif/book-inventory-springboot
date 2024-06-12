@@ -1,6 +1,7 @@
 package com.nelson.book_inventory_thymeleaf.models;
 
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,5 +57,24 @@ public class Genre {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(genre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Genre other = (Genre) obj;
+		return Objects.equals(genre, other.genre);
+	}
+	
+	
 
 }
