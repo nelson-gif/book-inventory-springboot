@@ -23,7 +23,7 @@ public class Genre {
 	private String genre;
 	@Column
 	private String description;
-	@OneToMany(mappedBy = "genreId", fetch = FetchType.LAZY)
+	@OneToMany( mappedBy = "genreId",  fetch = FetchType.LAZY)
 	private List<Book> books;
 	
 	public List<Book> getBooks() {

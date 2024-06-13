@@ -12,19 +12,20 @@ import org.springframework.web.server.ResponseStatusException;
 import com.nelson.book_inventory_thymeleaf.models.Author;
 import com.nelson.book_inventory_thymeleaf.repositories.IAuthorRepository;
 
-@Service
-public class AuthorService {
+@Service("author")
+public class AuthorService implements IService<Author>{
 	
 	@Autowired
 	IAuthorRepository authorRepo;
 	
 	//insert - create
-	public ResponseEntity<Author> insertAuthor(Author author){
+	@Override
+	public ResponseEntity<Author> insert(Author author){
 		if(author.getName() == null || author.getLastName() == null) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "name or lastName cannot be null");
 		}
 		
-		Optional<Author> authorOp = selectAuthor().stream()
+		Optional<Author> authorOp = select().stream()
 				.filter( element -> element.equals(author))
 				.findFirst();
 		if(authorOp.isPresent()) {
@@ -35,12 +36,14 @@ public class AuthorService {
 	}
 	
 	//select * from author - read
-	public ArrayList<Author> selectAuthor(){
+	@Override
+	public ArrayList<Author> select(){
 		return (ArrayList<Author>)authorRepo.findAll();
 	} 
 	
 	//select * from author where id = {id} - read
-	public Author selectAuthorById(Integer id) {
+	@Override
+	public Author selectById(Integer id) {
 		
 		Author author= authorRepo.findById(id).orElse(null);
 		
@@ -52,8 +55,13 @@ public class AuthorService {
 	}
 	
 	//update 
-	public Author updateAuthorById(Author newAuthor, Integer id) {
-		Optional<Author> authorOp = selectAuthor().stream()
+	@Override
+	public Author updateById(Author newAuthor, Integer id) {
+		if(newAuthor.getName() == null || newAuthor.getLastName() == null) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "name or lastName cannot be null");
+		}
+		
+		Optional<Author> authorOp = select().stream()
 				.filter( element -> element.getAuthorId() == id)
 				.findFirst();
 		
@@ -71,7 +79,8 @@ public class AuthorService {
 	}
 	
 	//delete
-	public Boolean deleteAuthorById(Integer id) {
+	@Override
+	public Boolean deleteById(Integer id) {
 		try {
 			authorRepo.deleteById(id);
 			return true;

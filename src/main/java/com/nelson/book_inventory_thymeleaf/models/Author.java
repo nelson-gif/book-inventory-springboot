@@ -1,9 +1,11 @@
 package com.nelson.book_inventory_thymeleaf.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +32,7 @@ public class Author {
 	private Gender gender;
 	@Column
 	private Date DOB;
-	@OneToMany(mappedBy = "authorId", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL,  mappedBy = "authorId", fetch = FetchType.LAZY)
 	List<Book> books;
 
 	public Author() {

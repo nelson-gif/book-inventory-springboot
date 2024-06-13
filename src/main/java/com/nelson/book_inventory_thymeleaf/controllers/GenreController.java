@@ -28,7 +28,6 @@ public class GenreController {
 	//insert
 	@PostMapping
 	public ResponseEntity<Genre> insertGenre(@RequestBody Genre genre) {
-		//Object genre = genre1;
 		return genreServ.insert(genre);
 	}
 	
@@ -51,7 +50,7 @@ public class GenreController {
 	}
 	
 	//delete
-	@DeleteMapping("/{id}")
+	@DeleteMapping(path="/{id}")
 	public Boolean deleteGenreById(@PathVariable("id") Integer id) {
 		return genreServ.deleteById(id);
 	}

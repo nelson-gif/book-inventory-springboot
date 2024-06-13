@@ -1,9 +1,11 @@
 package com.nelson.book_inventory_thymeleaf.models;
 
 import java.util.Date;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,10 +17,10 @@ public class Book {
 
 	@Id
 	private Integer bookISBN;
-	@ManyToOne
-	@JoinColumn(name="author_id")
+	@ManyToOne(fetch =FetchType.LAZY)
+	@JoinColumn(name="authorId")
 	private Author authorId;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="genre_id")
 	private Genre genreId;
 	@Column
@@ -49,13 +51,13 @@ public class Book {
 		this.authorId = authorId;
 	}
 
-//	public Integer getGenre() {
-//		return genreId;
-//	}
-//
-//	public void setGenre(Integer genreId) {
-//		this.genreId = genreId;
-//	}
+	public Genre getGenre() {
+		return genreId;
+	}
+
+	public void setGenre(Genre genreId) {
+		this.genreId = genreId;
+	}
 
 	public String getTitle() {
 		return title;
@@ -97,4 +99,22 @@ public class Book {
 		this.publicationDate = publicationDate;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(bookISBN);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		return Objects.equals(bookISBN, other.bookISBN);
+	}
+
+	
 }

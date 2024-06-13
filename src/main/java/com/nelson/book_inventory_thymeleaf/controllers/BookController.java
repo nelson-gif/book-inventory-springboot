@@ -14,45 +14,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nelson.book_inventory_thymeleaf.models.Author;
+import com.nelson.book_inventory_thymeleaf.models.Book;
 import com.nelson.book_inventory_thymeleaf.services.IService;
 
 @RestController
-@RequestMapping("/author")
-public class AuthorController {
-	
+@RequestMapping("/book")
+public class BookController {
+
 	@Autowired
-	@Qualifier("author")
-	IService<Author> authorService;
+	@Qualifier("book")
+	IService<Book> bookServ;
 	
-	//Create - insert
+	//insert
 	@PostMapping
-	public ResponseEntity<Author> insertAuthor(@RequestBody Author author){
-		return authorService.insert(author);
+	public ResponseEntity<Book> insertBook(@RequestBody Book book){
+		return bookServ.insert(book);
 	}
 	
-	//Read - select *
+	//select
 	@GetMapping
-	public ArrayList<Author> selectAuthor(){
-		return authorService.select();
+	public ArrayList<Book> selectBook(){
+		return bookServ.select();
 	}
 	
-	//Read - select by id
+	//select by id
 	@GetMapping(path="/{id}")
-	public Author selectAuthorById(@PathVariable("id") Integer id) {
-		return authorService.selectById(id);
+	public Book selectBookById(@PathVariable("id") Integer id) {
+		return bookServ.selectById(id);
 	}
 	
 	//update
 	@PutMapping(path="/{id}")
-	public Author updateAuthorById(@RequestBody Author author, @PathVariable("id") Integer id) {
-		return authorService.updateById(author, id);
+	public Book updateBookById(@RequestBody Book book, @PathVariable("id") Integer id) {
+		return bookServ.updateById(book, id);
 	}
 	
 	//delete
 	@DeleteMapping(path="/{id}")
-	public Boolean deleteAuthorById(@PathVariable("id") Integer id) {
-		return authorService.deleteById(id);
+	public Boolean deleteBookById(@PathVariable("id") Integer id) {
+		return bookServ.deleteById(id);
 	}
 	
 }
