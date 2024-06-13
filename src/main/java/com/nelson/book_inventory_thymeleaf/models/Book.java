@@ -3,9 +3,11 @@ package com.nelson.book_inventory_thymeleaf.models;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,12 +18,15 @@ import jakarta.persistence.Table;
 public class Book {
 
 	@Id
-	private Integer bookISBN;
-	@ManyToOne(fetch =FetchType.LAZY)
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer bookIsbn;
+	@ManyToOne
 	@JoinColumn(name="authorId")
+	@JsonManagedReference
 	private Author authorId;
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="genre_id")
+    @ManyToOne
+    @JoinColumn(name="genreId")
+    @JsonManagedReference
 	private Genre genreId;
 	@Column
 	private String title;
@@ -35,12 +40,36 @@ public class Book {
 	private Date publicationDate;
 
 
-	public Integer getBookISBN() {
-		return bookISBN;
+
+	public Book() {
 	}
 
-	public void setBookISBN(Integer bookISBN) {
-		this.bookISBN = bookISBN;
+	public Book(Integer bookIsbn, Author authorId, Genre genreId, String title, Integer stock, Double price,
+			Integer pages, Date publicationDate) {
+		this.bookIsbn = bookIsbn;
+		this.authorId = authorId;
+		this.genreId = genreId;
+		this.title = title;
+		this.stock = stock;
+		this.price = price;
+		this.pages = pages;
+		this.publicationDate = publicationDate;
+	}
+
+	public Integer getBookIsbn() {
+		return bookIsbn;
+	}
+
+	public void setBookIsbn(Integer bookIsbn) {
+		this.bookIsbn = bookIsbn;
+	}
+
+	public Genre getGenreId() {
+		return genreId;
+	}
+
+	public void setGenreId(Genre genreId) {
+		this.genreId = genreId;
 	}
 
 	public Author getAuthorId() {
@@ -49,14 +78,6 @@ public class Book {
 
 	public void setAuthorId(Author authorId) {
 		this.authorId = authorId;
-	}
-
-	public Genre getGenre() {
-		return genreId;
-	}
-
-	public void setGenre(Genre genreId) {
-		this.genreId = genreId;
 	}
 
 	public String getTitle() {
@@ -101,7 +122,7 @@ public class Book {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(bookISBN);
+		return Objects.hash(bookIsbn);
 	}
 
 	@Override
@@ -113,8 +134,9 @@ public class Book {
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
-		return Objects.equals(bookISBN, other.bookISBN);
+		return Objects.equals(bookIsbn, other.bookIsbn);
 	}
 
+	
 	
 }

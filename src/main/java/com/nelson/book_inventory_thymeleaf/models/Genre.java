@@ -3,9 +3,13 @@ package com.nelson.book_inventory_thymeleaf.models;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,9 +27,22 @@ public class Genre {
 	private String genre;
 	@Column
 	private String description;
-	@OneToMany( mappedBy = "genreId",  fetch = FetchType.LAZY)
-	private List<Book> books;
+	@OneToMany( mappedBy = "genreId", cascade = CascadeType.ALL)
+	@JsonBackReference
+	//@JsonIgnore
+	List<Book> books;
 	
+	
+	
+	public Genre() {
+	}
+
+	public Genre(Integer genreId, String genre, String description) {
+		this.genreId = genreId;
+		this.genre = genre;
+		this.description = description;
+	}
+
 	public List<Book> getBooks() {
 		return books;
 	}
@@ -33,12 +50,12 @@ public class Genre {
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
-
-	public Integer getIdGenre() {
+	
+	public Integer getGenreId() {
 		return genreId;
-	} 
+	}
 
-	public void setIdGenre(Integer genreId) {
+	public void setGenreId(Integer genreId) {
 		this.genreId = genreId;
 	}
 

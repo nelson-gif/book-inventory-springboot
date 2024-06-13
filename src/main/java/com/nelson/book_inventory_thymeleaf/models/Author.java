@@ -1,9 +1,12 @@
 package com.nelson.book_inventory_thymeleaf.models;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,8 +35,10 @@ public class Author {
 	private Gender gender;
 	@Column
 	private Date DOB;
-	@OneToMany(cascade = CascadeType.ALL,  mappedBy = "authorId", fetch = FetchType.LAZY)
-	List<Book> books;
+	@OneToMany( mappedBy = "authorId", cascade = CascadeType.ALL)
+	@JsonBackReference
+	//@JsonIgnore
+	List<Book> books1;
 
 	public Author() {
 	}
@@ -47,12 +52,12 @@ public class Author {
 		DOB = dOB;
 	}
 
-	public List<Book> getBooks() {
-		return books;
+	public List<Book> getBooks1() {
+		return books1;
 	}
 
 	public void setBooks(List<Book> books) {
-		this.books = books;
+		this.books1 = books;
 	}
 
 	public Integer getAuthorId() {

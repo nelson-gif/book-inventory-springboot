@@ -59,7 +59,7 @@ public class GenreService implements IService<Genre>{
 	public Genre updateById(Genre newGenre, Integer id) {
 		Optional<Genre> genreOptional = select()
 				.stream()
-				.filter(element -> element.getIdGenre() == id)
+				.filter(element -> element.getGenreId() == id)
 				.findFirst();
 		
 		if(!genreOptional.isPresent()) {

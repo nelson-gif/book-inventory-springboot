@@ -50,7 +50,7 @@ public class BookService implements IService<Book>{
 	@Override
 	public Book updateById(Book newBook, Integer id) {
 		Optional<Book> bookOp = select().stream()
-				.filter(element -> element.getBookISBN() == id)
+				.filter(element -> element.getBookIsbn() == id)
 				.findFirst();
 		
 		if(!bookOp.isPresent()) {
