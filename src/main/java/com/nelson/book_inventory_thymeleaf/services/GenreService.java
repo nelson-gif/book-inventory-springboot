@@ -12,34 +12,19 @@ import org.springframework.web.server.ResponseStatusException;
 import com.nelson.book_inventory_thymeleaf.models.Genre;
 import com.nelson.book_inventory_thymeleaf.repositories.IGenreRepository;
 
-@Service
-public class GenreService{
+@Service("genre")
+public class GenreService implements IService<Genre>{
 	
 	@Autowired
 	IGenreRepository genreRepo;
 	
-	//select
-	public ArrayList<Genre> selectGenre(){
-		return (ArrayList<Genre>)genreRepo.findAll();
-	}
-	
-	//selectById
-	public Genre getGenreById(Integer id){
-		Genre genre = genreRepo.findById(id).orElse(null);
-		
-		if(genre == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id provided doesn't exist in the database");
-		}
-		
-		return genre;
-	}
-	
 	//insert
-	public ResponseEntity<Genre> insertGenre(Genre genre) {
+	@Override
+	public ResponseEntity<Genre> insert(Genre genre) {
 		if(genre.getGenre() == null) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "genre value cannot be null");
 		}
-		Optional<Genre> genreOptional = selectGenre()
+		Optional<Genre> genreOptional = select()
 				.stream()
 				.filter(element -> element.equals(genre))
 				.findFirst();
@@ -51,20 +36,28 @@ public class GenreService{
 		return new ResponseEntity<Genre>(genreRepo.save(genre), HttpStatus.CREATED);
 	}
 	
-	//delete
-	public Boolean deleteGenre(Integer id) {
-		try {
-			genreRepo.deleteById(id);
-			return true;
-		}catch(Exception e) {
-			return false;
+	//select
+	@Override
+	public ArrayList<Genre> select(){
+		return (ArrayList<Genre>)genreRepo.findAll();
+	}
+	
+	//selectById
+	@Override
+	public Genre selectById(Integer id){
+		Genre genre = genreRepo.findById(id).orElse(null);
+		
+		if(genre == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id provided doesn't exist in the database");
 		}
+		
+		return genre;
 	}
 	
 	//update
-	public Genre updateGenreById(Genre newGenre, Integer id) {
-		
-		Optional<Genre> genreOptional = selectGenre()
+	@Override
+	public Genre updateById(Genre newGenre, Integer id) {
+		Optional<Genre> genreOptional = select()
 				.stream()
 				.filter(element -> element.getIdGenre() == id)
 				.findFirst();
@@ -81,5 +74,15 @@ public class GenreService{
 		return genreRepo.save(genre);
 	}
 	
+	//delete
+	@Override
+	public Boolean deleteById(Integer id) {
+		try {
+			genreRepo.deleteById(id);
+			return true;
+		}catch(Exception e) {
+			return false;
+		}
+	}
 
 }
