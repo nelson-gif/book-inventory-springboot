@@ -28,11 +28,9 @@ public class Genre {
 	@Column
 	private String description;
 	@OneToMany( mappedBy = "genreId", cascade = CascadeType.ALL)
-	@JsonBackReference
-	//@JsonIgnore
 	List<Book> books;
-	
-	
+	//@JsonBackReference
+	//@JsonIgnore
 	
 	public Genre() {
 	}
@@ -43,9 +41,9 @@ public class Genre {
 		this.description = description;
 	}
 
-	public List<Book> getBooks() {
-		return books;
-	}
+//	public List<Book> getBooks() {
+//		return books;
+//	}
 
 	public void setBooks(List<Book> books) {
 		this.books = books;

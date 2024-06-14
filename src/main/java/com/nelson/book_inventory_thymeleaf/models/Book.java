@@ -22,12 +22,13 @@ public class Book {
 	private Integer bookIsbn;
 	@ManyToOne
 	@JoinColumn(name="authorId")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private Author authorId;
     @ManyToOne
     @JoinColumn(name="genreId")
-    @JsonManagedReference
-	private Genre genreId;
+    //@JsonBackReference
+    private Genre genreId;
+    //@JsonManagedReference
 	@Column
 	private String title;
 	@Column

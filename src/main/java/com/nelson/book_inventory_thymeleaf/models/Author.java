@@ -36,9 +36,9 @@ public class Author {
 	@Column
 	private Date DOB;
 	@OneToMany( mappedBy = "authorId", cascade = CascadeType.ALL)
-	@JsonBackReference
-	//@JsonIgnore
 	List<Book> books1;
+	//@JsonBackReference
+	//@JsonIgnore
 
 	public Author() {
 	}
@@ -52,9 +52,9 @@ public class Author {
 		DOB = dOB;
 	}
 
-	public List<Book> getBooks1() {
-		return books1;
-	}
+//	public List<Book> getBooks1() {
+//		return books1;
+//	}
 
 	public void setBooks(List<Book> books) {
 		this.books1 = books;
