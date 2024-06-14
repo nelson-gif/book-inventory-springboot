@@ -57,9 +57,6 @@ public class AuthorService implements IService<Author>{
 	//update 
 	@Override
 	public Author updateById(Author newAuthor, Integer id) {
-		if(newAuthor.getName() == null || newAuthor.getLastName() == null) {
-			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "name or lastName cannot be null");
-		}
 		
 		Optional<Author> authorOp = select().stream()
 				.filter( element -> element.getAuthorId() == id)

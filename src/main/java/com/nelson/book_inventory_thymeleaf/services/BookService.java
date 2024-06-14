@@ -49,11 +49,8 @@ public class BookService implements IService<Book>{
 
 	@Override
 	public Book updateById(Book newBook, Integer id) {
-		Optional<Book> bookOp = select().stream()
-				.filter(element -> element.getBookIsbn() == id)
-				.findFirst();
 		
-		if(!bookOp.isPresent()) {
+		if(bookRepo.findById(id) == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "id provided doesn't exist");
 		}
 		

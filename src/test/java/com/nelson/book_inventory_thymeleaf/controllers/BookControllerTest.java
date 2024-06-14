@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nelson.book_inventory_thymeleaf.models.Author;
 import com.nelson.book_inventory_thymeleaf.models.Book;
 import com.nelson.book_inventory_thymeleaf.models.Gender;
@@ -53,6 +53,8 @@ public class BookControllerTest {
 	@InjectMocks
 	BookService service;
 	
+	private ObjectMapper objM = new ObjectMapper();
+	
 	@BeforeEach
 	void beforeEach() {
 		authorId = new Author(2, "paulo modified", "cohelo", null, null, null);
@@ -71,13 +73,9 @@ public class BookControllerTest {
 	@Nested
 	class integrationTest{		
 		@Test
-		@DisplayName("select all books test")
-		void selectBookSuccess() throws Exception{
-			mockMvc.perform(MockMvcRequestBuilders.get("/book")
-					.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.content()
-					.contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		void deleteBookById() throws Exception {
+			mockMvc.perform(MockMvcRequestBuilders.delete("/book/123456"))
+			.andExpect(MockMvcResultMatchers.status().isOk());
 		}
 		
 		//just change the number in the bookIsbn, since bookIsbn : 23565245 already exists
@@ -87,28 +85,45 @@ public class BookControllerTest {
 		void insertBookSuccess() throws Exception{
 			mockMvc.perform(MockMvcRequestBuilders.post("/book")
 					.contentType(MediaType.APPLICATION_JSON)
-					.content("{\r\n"
-							+ "    \"bookIsbn\" : 23565245,\r\n"
-							+ "    \"genreId\" : {\r\n"
-							+ "        \"genreId\" : 11,\r\n"
-							+ "        \"genre\" : \"COMEDY\"\r\n"
-							+ "    },\r\n"
-							+ "    \"authorId\":{\r\n"
-							+ "        \"authorId\" : 3,\r\n"
-							+ "        \"name\" : \"paulo\",\r\n"
-							+ "        \"lastName\" : \"cohelsdfo\"\r\n"
-							+ "    },\r\n"
-							+ "    \r\n"
-							+ "    \"title\": \"Don Quijote\",\r\n"
-							+ "    \"stock\": 10,\r\n"
-							+ "    \"price\": 19.99,\r\n"
-							+ "    \"pages\": 1234,\r\n"
-							+ "    \"publicationDate\": \"1605-01-16\"\r\n"
-							+ "}"))
+					.content(objM.writeValueAsString(book)))
 			.andExpect(MockMvcResultMatchers.status().isCreated())
 			.andExpect(MockMvcResultMatchers.content()
 					.contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 		}
+		
+		@Test
+		@DisplayName("select all books test")
+		void selectBookSuccess() throws Exception{
+			mockMvc.perform(MockMvcRequestBuilders.get("/book")
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.content()
+					.contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		}
+		
+		
+		@Test
+		void selectById() throws Exception {
+			mockMvc.perform(MockMvcRequestBuilders.get("/book/123456")
+					.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content()
+						.contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		}
+		
+		@Test
+		void updateById() throws Exception {
+			mockMvc.perform(MockMvcRequestBuilders.put("/book/123456")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content("{\r\n"
+							+ "    \"title\": \"title modified\",\r\n"
+							+ "    \"stock\": 345\r\n"
+							+ "}"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content()
+						.contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		}
+		
 	}
 	
 	@Nested
@@ -145,6 +160,7 @@ public class BookControllerTest {
 			
 			assertAll( () -> {
 					assertNotNull(service.select());
+					verify(repository).findAll();
 				}, () -> {
 					assertEquals(2, service.select().size());
 				}, () -> {
